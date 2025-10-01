@@ -1,0 +1,8 @@
+.env
+*.db
+node_modules
+.next
+.DS_Store
+public/logo.png
+uploads
+!src/app/uploads
