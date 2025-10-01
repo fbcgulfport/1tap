@@ -7,7 +7,7 @@
 		"build": "bun --bun next build",
 		"lint": "biome check . --write",
 		"typecheck": "tsc --noEmit",
-		"start": "bun --bun next start",
+		"start": "bun --bun next start --port 3100",
 		"dev": "bun --bun next dev --turbopack",
 		"db:push": "drizzle-kit push"
 	},
