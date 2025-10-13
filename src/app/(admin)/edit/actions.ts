@@ -15,9 +15,15 @@ export async function createLink(formData: FormData) {
 	const file = formData.get("file") as File | null
 	const description = formData.get("description") as string
 	const categoryId = formData.get("categoryId") as string
+	const trigger = formData.get("trigger") as string
 
 	if (!name || !url || !categoryId) {
 		throw new Error("Name, URL, and category are required")
+	}
+
+	// Validate trigger if provided
+	if (trigger && !/^[a-z0-9]*$/.test(trigger)) {
+		throw new Error("Trigger must be lowercase alphanumeric")
 	}
 
 	let filename: string | null = null
@@ -45,6 +51,7 @@ export async function createLink(formData: FormData) {
 		url,
 		filename,
 		description: description || null,
+		trigger: trigger || null,
 		categoryId,
 		sortOrder: nextOrder,
 		active: true
@@ -60,21 +67,29 @@ export async function updateLink(formData: FormData) {
 	const url = formData.get("url") as string
 	const file = formData.get("file") as File | null
 	const description = formData.get("description") as string
+	const trigger = formData.get("trigger") as string
 
 	if (!id || !name || !url) {
 		throw new Error("ID, name, and URL are required")
+	}
+
+	// Validate trigger if provided
+	if (trigger && !/^[a-z0-9]*$/.test(trigger)) {
+		throw new Error("Trigger must be lowercase alphanumeric")
 	}
 
 	const updateData: {
 		name: string
 		url: string
 		description: string | null
+		trigger: string | null
 		updatedAt: Date
 		filename?: string
 	} = {
 		name,
 		url,
 		description: description || null,
+		trigger: trigger || null,
 		updatedAt: new Date()
 	}
 
@@ -190,4 +205,26 @@ export async function reorderLinks(categoryId: string, linkIds: string[]) {
 
 	revalidatePath("/edit")
 	revalidatePath(`/${categoryId}`)
+}
+
+export async function updateCategoryTrigger(
+	categoryId: string,
+	trigger: string | null,
+	expiresAt: number | null
+) {
+	await requireAuth()
+
+	if (trigger && !/^[a-z0-9]*$/.test(trigger)) {
+		throw new Error("Trigger must be lowercase alphanumeric")
+	}
+
+	await db
+		.update(linkCategory)
+		.set({
+			activeTrigger: trigger,
+			triggerExpiresAt: expiresAt ? new Date(expiresAt) : null
+		})
+		.where(eq(linkCategory.id, categoryId))
+
+	revalidatePath("/edit")
 }

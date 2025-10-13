@@ -155,6 +155,22 @@ function EditLinkForm({
 							rows={3}
 						/>
 					</div>
+					<div>
+						<label htmlFor="linkTrigger" className="text-sm font-medium">
+							Trigger Match (lowercase alphanumeric, optional)
+						</label>
+						<Input
+							id="linkTrigger"
+							name="trigger"
+							defaultValue={link?.trigger || ""}
+							placeholder="e.g., myapp"
+							pattern="[a-z0-9]*"
+						/>
+						<p className="text-xs text-muted-foreground mt-1">
+							Set a trigger value that can be activated via API to redirect
+							directly to this link
+						</p>
+					</div>
 					<div className="flex gap-2">
 						<Button type="submit" className="flex-1" disabled={isLoading}>
 							{isLoading ? (
@@ -269,7 +285,13 @@ function EditLinkCard({
 }
 
 export function EditPageContent() {
-	const [categories, setCategories] = useState<Array<{ id: string }>>([])
+	const [categories, setCategories] = useState<
+		Array<{
+			id: string
+			activeTrigger: string | null
+			triggerExpiresAt: Date | null
+		}>
+	>([])
 	const [selectedCategoryId, setSelectedCategoryId] = useState<string>("")
 	const [links, setLinks] = useState<Array<typeof linkTable.$inferSelect>>([])
 	const [newCategoryName, setNewCategoryName] = useState("")

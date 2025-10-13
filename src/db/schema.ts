@@ -5,6 +5,7 @@ export const linkTable = sqliteTable("links", {
 	id: text()
 		.$defaultFn(() => createId())
 		.primaryKey(),
+	trigger: text().unique(),
 	categoryId: text().references(() => linkCategory.id),
 	active: integer({ mode: "boolean" }).notNull().default(true),
 	name: text().notNull(),
@@ -20,7 +21,9 @@ export const linkTable = sqliteTable("links", {
 })
 
 export const linkCategory = sqliteTable("link_categories", {
-	id: text().primaryKey()
+	id: text().primaryKey(),
+	activeTrigger: text(),
+	triggerExpiresAt: integer({ mode: "timestamp_ms" })
 })
 
 export const categoryVisit = sqliteTable("category_visits", {

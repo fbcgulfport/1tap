@@ -32,7 +32,8 @@ export default async function AdminLayout({
 				</div>
 				<div className="flex items-center gap-3">
 					{session.user.image && (
-						<Image
+						// biome-ignore lint/performance/noImgElement: <arbitrary>
+						<img
 							src={session.user.image}
 							alt={session.user.name}
 							width={32}
