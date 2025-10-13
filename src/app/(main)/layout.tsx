@@ -1,5 +1,5 @@
-import { Link } from "lucide-react"
-import { ShieldIcon } from "lucide-react"
+// import { Link } from "lucide-react"
+// import { ShieldIcon } from "lucide-react"
 import Image from "next/image"
 import { env } from "~/lib/env"
 
@@ -23,11 +23,11 @@ export default function MainLayout({
 						{env.PRODUCT_NAME}
 					</span>
 				</div>
-				<div className="flex items-center gap-3">
+				{/* <div className="flex items-center gap-3">
 					<Link href="/admin">
 						<ShieldIcon className="size-4" />
 					</Link>
-				</div>
+				</div> */}
 			</header>
 			<main className="flex-1 pt-20 mb-6 w-full flex flex-col items-center">
 				{children}
