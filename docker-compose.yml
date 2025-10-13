@@ -8,7 +8,6 @@ services:
             - PORT=3000
             - PRODUCT_NAME=1Tap
             - LOGO_URL=/logo.png
-            - EDIT_PASSWORD=${EDIT_PASSWORD:-changeme123}
         volumes:
             - app_data:/app/data
             - app_data:/app/uploads
