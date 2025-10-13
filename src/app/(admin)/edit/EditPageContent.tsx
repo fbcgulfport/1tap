@@ -28,7 +28,7 @@ import {
 	reorderLinks,
 	toggleLinkActive,
 	updateLink
-} from "~/app/edit/actions"
+} from "~/app/(admin)/edit/actions"
 import { LinkCard } from "~/components/LinkCard"
 import { Button } from "~/components/ui/button"
 import { Card } from "~/components/ui/card"

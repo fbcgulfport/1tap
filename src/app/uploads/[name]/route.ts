@@ -7,6 +7,6 @@ export async function GET(
 ) {
 	const { name } = await params
 	const filePath = path.join(process.cwd(), "uploads", name)
-	
+
 	return new Response(fs.readFileSync(filePath))
 }

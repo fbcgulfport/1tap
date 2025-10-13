@@ -6,8 +6,10 @@ import { and, eq, max } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 import { db } from "~/db"
 import { linkCategory, linkClick, linkTable } from "~/db/schema"
+import { requireAuth } from "~/lib/auth-helpers"
 
 export async function createLink(formData: FormData) {
+	await requireAuth()
 	const name = formData.get("name") as string
 	const url = formData.get("url") as string
 	const file = formData.get("file") as File | null
@@ -52,6 +54,7 @@ export async function createLink(formData: FormData) {
 }
 
 export async function updateLink(formData: FormData) {
+	await requireAuth()
 	const id = formData.get("id") as string
 	const name = formData.get("name") as string
 	const url = formData.get("url") as string
@@ -93,6 +96,7 @@ export async function updateLink(formData: FormData) {
 }
 
 export async function toggleLinkActive(id: string, active: boolean) {
+	await requireAuth()
 	await db
 		.update(linkTable)
 		.set({
@@ -105,6 +109,7 @@ export async function toggleLinkActive(id: string, active: boolean) {
 }
 
 export async function deleteLink(id: string) {
+	await requireAuth()
 	const link = await db
 		.select()
 		.from(linkTable)
@@ -142,6 +147,7 @@ export async function getLinksByCategory(categoryId: string) {
 }
 
 export async function createCategory(name: string) {
+	await requireAuth()
 	if (!name || name.trim() === "") {
 		throw new Error("Category name is required")
 	}
@@ -169,6 +175,7 @@ export async function createCategory(name: string) {
 }
 
 export async function reorderLinks(categoryId: string, linkIds: string[]) {
+	await requireAuth()
 	for (let i = 0; i < linkIds.length; i++) {
 		const linkId = linkIds[i]
 		if (linkId) {

@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { trackLinkClick } from "~/app/analytics/actions"
+import { trackLinkClick } from "~/app/(admin)/analytics/actions"
 
 export function TrackableLink({
 	linkId,

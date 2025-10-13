@@ -2,7 +2,7 @@ import type { NextConfig } from "next"
 
 const config: NextConfig = {
 	reactStrictMode: true,
-	allowedDevOrigins: ["http://localhost:3000", "https://local.shadowing.dev"],
+	allowedDevOrigins: [process.env.NEXT_PUBLIC_BETTER_AUTH_URL!],
 	productionBrowserSourceMaps: false,
 	experimental: {
 		serverSourceMaps: false,

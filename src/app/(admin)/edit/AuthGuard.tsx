@@ -42,39 +42,37 @@ export function AuthGuard({ children, authenticateAction }: AuthGuardProps) {
 
 	return (
 		<div className="flex min-h-[60vh] items-center justify-center">
-			<div className="w-full max-w-sm space-y-6">
-				<div className="text-center">
-					<h1 className="text-2xl font-semibold tracking-tight">
-						Authentication Required
-					</h1>
-					<p className="text-sm text-muted-foreground mt-2">
-						Please enter the password to access the edit panel
-					</p>
+			<div className="text-center">
+				<h1 className="text-2xl font-semibold tracking-tight">
+					Authentication Required
+				</h1>
+				<p className="text-sm text-muted-foreground mt-2">
+					Please enter the password to access the edit panel
+				</p>
+			</div>
+
+			<form onSubmit={handleSubmit} className="space-y-4">
+				<div className="space-y-2">
+					<Input
+						type="password"
+						placeholder="Enter password"
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
+						className={error ? "border-destructive" : ""}
+						disabled={isLoading}
+						autoFocus
+					/>
+					{error && <p className="text-sm text-destructive">{error}</p>}
 				</div>
 
-				<form onSubmit={handleSubmit} className="space-y-4">
-					<div className="space-y-2">
-						<Input
-							type="password"
-							placeholder="Enter password"
-							value={password}
-							onChange={(e) => setPassword(e.target.value)}
-							className={error ? "border-destructive" : ""}
-							disabled={isLoading}
-							autoFocus
-						/>
-						{error && <p className="text-sm text-destructive">{error}</p>}
-					</div>
-
-					<Button
-						type="submit"
-						className="w-full"
-						disabled={isLoading || !password.trim()}
-					>
-						{isLoading ? "Authenticating..." : "Enter"}
-					</Button>
-				</form>
-			</div>
+				<Button
+					type="submit"
+					className="w-full"
+					disabled={isLoading || !password.trim()}
+				>
+					{isLoading ? "Authenticating..." : "Enter"}
+				</Button>
+			</form>
 		</div>
 	)
 }

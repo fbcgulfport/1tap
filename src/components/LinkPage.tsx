@@ -1,6 +1,6 @@
 import { and, eq } from "drizzle-orm"
 import { redirect } from "next/navigation"
-import { trackCategoryVisit } from "~/app/analytics/actions"
+import { trackCategoryVisit } from "~/app/(admin)/analytics/actions"
 import { LinkCard } from "~/components/LinkCard"
 import { db } from "~/db"
 import { linkTable } from "~/db/schema"
