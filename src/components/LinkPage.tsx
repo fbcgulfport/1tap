@@ -3,7 +3,7 @@ import { redirect } from "next/navigation"
 import { trackCategoryVisit } from "~/app/(admin)/analytics/actions"
 import { LinkCard } from "~/components/LinkCard"
 import { db } from "~/db"
-import { linkTable } from "~/db/schema"
+import { linkCategory, linkTable } from "~/db/schema"
 
 export async function LinkPage({ categoryId }: { categoryId: string }) {
 	// Track the category visit
@@ -16,6 +16,14 @@ export async function LinkPage({ categoryId }: { categoryId: string }) {
 			and(eq(linkTable.active, true), eq(linkTable.categoryId, categoryId))
 		)
 		.orderBy(linkTable.sortOrder)
+
+	const category = (
+		await db
+			.select()
+			.from(linkCategory)
+			.where(eq(linkCategory.id, categoryId))
+			.limit(1)
+	).at(0)
 
 	if (links.length === 0) {
 		return (
@@ -32,6 +40,17 @@ export async function LinkPage({ categoryId }: { categoryId: string }) {
 		if (link?.filename) {
 			const fileUrl = `/uploads/${link.filename}`
 			redirect(fileUrl)
+		}
+	}
+
+	if (
+		category?.activeTrigger &&
+		category.triggerExpiresAt &&
+		category.triggerExpiresAt.getTime() > Date.now()
+	) {
+		const link = links.find((link) => link.trigger === category.activeTrigger)
+		if (link) {
+			redirect(link.url)
 		}
 	}
 
