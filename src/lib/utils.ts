@@ -8,3 +8,11 @@ export function cn(...inputs: ClassValue[]) {
 export function titleCase(str: string) {
 	return str.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())
 }
+
+export function formatDate(date: Date) {
+	return date.toLocaleDateString("en-US", {
+		month: "long",
+		day: "numeric",
+		year: "numeric"
+	})
+}

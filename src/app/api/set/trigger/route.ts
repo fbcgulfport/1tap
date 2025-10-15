@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm"
 import { type NextRequest, NextResponse } from "next/server"
 import { db } from "~/db"
 import { linkCategory } from "~/db/schema"
+import { z } from "zod"
 
 export async function POST(request: NextRequest) {
 	try {
@@ -13,18 +14,24 @@ export async function POST(request: NextRequest) {
 
 		// Parse request body
 		const body = await request.json()
-		const { category, trigger, expiresAt } = body
+		const { category, trigger, expiresAt } = z
+			.object({
+				category: z.string(),
+				trigger: z.string().optional(),
+				expiresAt: z.number().optional()
+			})
+			.parse(body)
 
 		// Validate required fields
-		if (!category || !trigger) {
+		if (!category) {
 			return NextResponse.json(
-				{ error: "category and trigger are required" },
+				{ error: "category is required" },
 				{ status: 400 }
 			)
 		}
 
 		// Validate trigger format (lowercase alphanumeric)
-		if (!/^[a-z0-9]+$/.test(trigger)) {
+		if (trigger && !/^[a-z0-9]+$/.test(trigger)) {
 			return NextResponse.json(
 				{ error: "trigger must be lowercase alphanumeric" },
 				{ status: 400 }

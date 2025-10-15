@@ -27,11 +27,12 @@ import {
 	getLinksByCategory,
 	reorderLinks,
 	toggleLinkActive,
+	updateCategoryTrigger,
 	updateLink
 } from "~/app/(admin)/edit/actions"
 import { LinkCard } from "~/components/LinkCard"
 import { Button } from "~/components/ui/button"
-import { Card } from "~/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import {
 	Dialog,
 	DialogContent,
@@ -44,6 +45,7 @@ import { Select } from "~/components/ui/select"
 import { Switch } from "~/components/ui/switch"
 import { Textarea } from "~/components/ui/textarea"
 import type { linkTable } from "~/db/schema"
+import { formatDate } from "~/lib/utils"
 
 function EditLinkForm({
 	link,
@@ -394,6 +396,11 @@ export function EditPageContent() {
 			.join(" ")
 	}
 
+	const handleDeactivateTrigger = async () => {
+		await updateCategoryTrigger(selectedCategoryId, null, null)
+		await refreshCategories()
+	}
+
 	return (
 		<div className="w-full max-w-6xl lg:w-[75%] xl:w-[60%] space-y-6 mb-8">
 			<div className="space-y-4">
@@ -457,6 +464,32 @@ export function EditPageContent() {
 
 			{selectedCategoryId && (
 				<div>
+					{selectedCategory?.activeTrigger && (
+						<Card>
+							<CardHeader>
+								<CardTitle>A Trigger is Active</CardTitle>
+							</CardHeader>
+							<CardContent>
+								The trigger{" "}
+								<span className="font-bold">
+									{selectedCategory.activeTrigger}
+								</span>{" "}
+								is currently active
+								{selectedCategory.triggerExpiresAt && (
+									<>
+										and expires at{" "}
+										<span className="font-bold">
+											{formatDate(selectedCategory.triggerExpiresAt)}
+										</span>
+									</>
+								)}
+								. You can deactivate the trigger by clicking the button below.
+								<Button variant="destructive" onClick={handleDeactivateTrigger}>
+									Deactivate Trigger
+								</Button>
+							</CardContent>
+						</Card>
+					)}
 					<h2 className="text-lg font-semibold mb-4">
 						{selectedCategory ? formatCategoryName(selectedCategory.id) : ""}{" "}
 						Links
