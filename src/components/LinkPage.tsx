@@ -5,6 +5,8 @@ import { LinkCard } from "~/components/LinkCard"
 import { db } from "~/db"
 import { linkCategory, linkTable } from "~/db/schema"
 
+export const dynamic = "force-dynamic"
+
 export async function LinkPage({ categoryId }: { categoryId: string }) {
 	// Track the category visit
 	await trackCategoryVisit(categoryId)
