@@ -27,6 +27,8 @@ export async function LinkPage({ categoryId }: { categoryId: string }) {
 			.limit(1)
 	).at(0)
 
+	console.log(links, category)
+
 	if (links.length === 0) {
 		return (
 			<div className="flex items-center justify-center h-64">
