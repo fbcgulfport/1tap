@@ -465,25 +465,28 @@ export function EditPageContent() {
 			{selectedCategoryId && (
 				<div>
 					{selectedCategory?.activeTrigger && (
-						<Card>
+						<Card className="mb-4">
 							<CardHeader>
 								<CardTitle>A Trigger is Active</CardTitle>
 							</CardHeader>
-							<CardContent>
-								The trigger{" "}
-								<span className="font-bold">
-									{selectedCategory.activeTrigger}
-								</span>{" "}
-								is currently active
-								{selectedCategory.triggerExpiresAt && (
-									<>
-										and expires at{" "}
-										<span className="font-bold">
-											{formatDate(selectedCategory.triggerExpiresAt)}
-										</span>
-									</>
-								)}
-								. You can deactivate the trigger by clicking the button below.
+							<CardContent className="flex flex-col gap-2">
+								<div>
+									The trigger{" "}
+									<span className="font-bold">
+										{selectedCategory.activeTrigger}
+									</span>{" "}
+									is currently active for this category
+									{selectedCategory.triggerExpiresAt && (
+										<>
+											{" "}
+											and expires at{" "}
+											<span className="font-bold">
+												{formatDate(selectedCategory.triggerExpiresAt)}
+											</span>
+										</>
+									)}
+									. You can deactivate the trigger by clicking the button below.
+								</div>
 								<Button variant="destructive" onClick={handleDeactivateTrigger}>
 									Deactivate Trigger
 								</Button>
