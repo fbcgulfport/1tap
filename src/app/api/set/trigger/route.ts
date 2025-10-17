@@ -1,8 +1,8 @@
 import { eq } from "drizzle-orm"
 import { type NextRequest, NextResponse } from "next/server"
+import { z } from "zod"
 import { db } from "~/db"
 import { linkCategory } from "~/db/schema"
-import { z } from "zod"
 
 export async function POST(request: NextRequest) {
 	try {

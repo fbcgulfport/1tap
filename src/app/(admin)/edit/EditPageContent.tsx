@@ -18,6 +18,7 @@ import {
 } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import { Loader2Icon } from "lucide-react"
+import posthog from "posthog-js"
 import { useEffect, useState } from "react"
 import {
 	createCategory,
@@ -77,11 +78,26 @@ function EditLinkForm({
 			if (isEditMode) {
 				formData.append("id", link.id)
 				await updateLink(formData)
+				posthog.capture("link_updated", {
+					link_id: link.id,
+					link_name: link.name,
+					link_url: link.url,
+					link_description: link.description,
+					link_trigger: link.trigger,
+					category_id: categoryId
+				})
 			} else {
 				if (categoryId) {
 					formData.append("categoryId", categoryId)
 				}
 				await createLink(formData)
+				posthog.capture("link_created", {
+					link_name: formData.get("name"),
+					link_url: formData.get("url"),
+					link_description: formData.get("description"),
+					link_trigger: formData.get("trigger"),
+					category_id: categoryId
+				})
 			}
 			setIsOpen(false)
 			onSuccess?.()
@@ -237,6 +253,14 @@ function EditLinkCard({
 			)
 		) {
 			await deleteLink(link.id)
+			posthog.capture("link_deleted", {
+				link_id: link.id,
+				link_name: link.name,
+				link_url: link.url,
+				link_description: link.description,
+				link_trigger: link.trigger,
+				category_id: link.categoryId
+			})
 			onSuccess?.()
 		}
 	}
@@ -362,6 +386,9 @@ export function EditPageContent() {
 				error instanceof Error ? error.message : "Failed to create category"
 			setCategoryError(errorMessage)
 		} finally {
+			posthog.capture("category_created", {
+				category_name: newCategoryName.trim()
+			})
 			setIsCreatingCategory(false)
 		}
 	}

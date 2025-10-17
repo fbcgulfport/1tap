@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import posthog from "posthog-js"
 import { trackLinkClick } from "~/app/(admin)/analytics/actions"
 
 export function TrackableLink({
@@ -25,6 +26,11 @@ export function TrackableLink({
 	children: React.ReactNode
 }) {
 	const handleClick = async () => {
+		posthog.capture("link_card_clicked", {
+			link_id: linkId,
+			link_url: href,
+			category_id: categoryId
+		})
 		try {
 			await trackLinkClick(linkId, categoryId)
 		} catch (error) {

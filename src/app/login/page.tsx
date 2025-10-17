@@ -2,6 +2,7 @@
 
 import { Loader2Icon } from "lucide-react"
 import { useSearchParams } from "next/navigation"
+import posthog from "posthog-js"
 import { useEffect } from "react"
 import { authClient } from "~/lib/auth-client"
 
@@ -10,6 +11,10 @@ export default function LoginPage() {
 	const redirect = searchParams.get("redirect") || "/edit"
 
 	useEffect(() => {
+		posthog.capture("login_redirect_initiated", {
+			provider: "google",
+			redirect_url: redirect
+		})
 		authClient.signIn.social({
 			provider: "google",
 			callbackURL: redirect
