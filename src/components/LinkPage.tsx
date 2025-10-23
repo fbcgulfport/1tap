@@ -39,9 +39,8 @@ export async function LinkPage({ categoryId }: { categoryId: string }) {
 
 	if (links.length === 1) {
 		const link = links[0]
-		if (link?.filename) {
-			const fileUrl = `/uploads/${link.filename}`
-			redirect(fileUrl)
+		if (link) {
+			redirect(link.url)
 		}
 	}
 
