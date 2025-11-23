@@ -75,6 +75,7 @@ export async function trackLinkClick(
 	linkId: string,
 	categoryId: string,
 	linkUrl?: string,
+	linkTrigger?: string,
 	clientDistinctId?: string
 ) {
 	try {
@@ -93,12 +94,14 @@ export async function trackLinkClick(
 
 		// Track with PostHog server-side
 		// Priority: client-provided ID > cookie ID > IP fallback
-		const distinctId = clientDistinctId || posthogDistinctId || ip || "anonymous"
+		const distinctId =
+			clientDistinctId || posthogDistinctId || ip || "anonymous"
 		await captureEvent(distinctId, "link_card_clicked", {
 			link_id: linkId,
 			link_url: linkUrl,
 			category_id: categoryId,
-			user_agent: userAgent
+			user_agent: userAgent,
+			link_trigger: linkTrigger
 		})
 	} catch (error) {
 		console.error("Failed to track link click:", error)

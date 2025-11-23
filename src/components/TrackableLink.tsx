@@ -11,6 +11,7 @@ export function TrackableLink({
 	target = "_blank",
 	rel = "noopener noreferrer",
 	prefetch = false,
+	linkTrigger,
 	className,
 	style,
 	children
@@ -21,21 +22,16 @@ export function TrackableLink({
 	target?: string
 	rel?: string
 	prefetch?: boolean
+	linkTrigger?: string
 	className?: string
 	style?: React.CSSProperties
 	children: React.ReactNode
 }) {
 	const handleClick = async () => {
-		// Get PostHog distinct_id to pass to server
 		const distinctId = posthog.get_distinct_id()
 
-		posthog.capture("link_card_clicked", {
-			link_id: linkId,
-			link_url: href,
-			category_id: categoryId
-		})
 		try {
-			await trackLinkClick(linkId, categoryId, href, distinctId)
+			await trackLinkClick(linkId, categoryId, href, linkTrigger, distinctId)
 		} catch (error) {
 			console.error("Failed to track click:", error)
 		}
