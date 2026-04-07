@@ -1,24 +1,23 @@
 services:
-    app:
-        build: .
-        ports:
-            - "3000:3000"
-        environment:
-            - NODE_ENV=production
-            - PORT=3000
-            - PRODUCT_NAME=1Tap
-            - LOGO_URL=/logo.png
-        volumes:
-            - app_data:/app/data
-            - app_data:/app/uploads
-        restart: unless-stopped
-        healthcheck:
-            test: ["CMD", "curl", "-f", "http://localhost:3000"]
-            interval: 30s
-            timeout: 10s
-            retries: 3
-            start_period: 40s
-
-volumes:
-    app_data:
-        driver: local
+  app:
+    image: ghcr.io/fbcgulfport/1tap:latest
+    container_name: 1tap
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - PRODUCT_NAME=${PRODUCT_NAME:-1Tap}
+      - LOGO_URL=${LOGO_URL:-/logo.png}
+      - API_KEY=${API_KEY}
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+      - NEXT_PUBLIC_BETTER_AUTH_URL=${NEXT_PUBLIC_BETTER_AUTH_URL}
+      - AUTHORIZED_DOMAIN=${AUTHORIZED_DOMAIN}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - POSTHOG_API_KEY=${POSTHOG_API_KEY:-}
+      - NEXT_PUBLIC_POSTHOG_KEY=${NEXT_PUBLIC_POSTHOG_KEY:-}
+    volumes:
+      - ./persist/data:/app/data
+      - ./persist/uploads:/app/uploads
+    restart: unless-stopped

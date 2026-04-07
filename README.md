@@ -48,23 +48,37 @@ Open [http://localhost:3000](http://localhost:3000) to view the app.
 
 ## Docker
 
-Run latest image from GHCR:
+### Fast install (curl + prompts)
 
 ```bash
-docker run -d \
-  --name 1tap \
-  -p 3000:3000 \
-  -v 1tap_data:/app/data \
-  -v 1tap_uploads:/app/uploads \
-  -e PRODUCT_NAME="1Tap" \
-  -e LOGO_URL="/logo.png" \
-  -e API_KEY="replace-me" \
-  -e BETTER_AUTH_SECRET="$(openssl rand -hex 32)" \
-  -e NEXT_PUBLIC_BETTER_AUTH_URL="http://localhost:3000" \
-  -e AUTHORIZED_DOMAIN="example.com" \
-  -e GOOGLE_CLIENT_ID="your-google-client-id" \
-  -e GOOGLE_CLIENT_SECRET="your-google-client-secret" \
-  ghcr.io/fbcgulfport/1tap:latest
+curl -fsSL https://raw.githubusercontent.com/fbcgulfport/1tap/main/install-docker.sh | sh
+```
+
+Installer does all setup:
+- prompts for required config values
+- downloads latest `docker-compose.yml`
+- creates persistent folders (`persist/data`, `persist/uploads`)
+- writes `.env`
+- starts the app with Docker Compose
+
+### Manual Docker Compose
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/fbcgulfport/1tap/main/docker-compose.yml -o docker-compose.yml
+cp .env.example .env
+# edit .env (required: API_KEY, BETTER_AUTH_SECRET, NEXT_PUBLIC_BETTER_AUTH_URL, AUTHORIZED_DOMAIN, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET)
+mkdir -p persist/data persist/uploads
+docker compose up -d
+```
+
+Data locations:
+- SQLite DB: `./persist/data/app.db`
+- Uploaded files: `./persist/uploads/`
+
+Upgrade flow (keeps data):
+```bash
+docker compose pull
+docker compose up -d
 ```
 
 ## Scripts
