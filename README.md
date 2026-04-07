@@ -46,6 +46,27 @@ A simple link aggregator page designed for use with NFC tap tags
 
 Open [http://localhost:3000](http://localhost:3000) to view the app.
 
+## Docker
+
+Run latest image from GHCR:
+
+```bash
+docker run -d \
+  --name 1tap \
+  -p 3000:3000 \
+  -v 1tap_data:/app/data \
+  -v 1tap_uploads:/app/uploads \
+  -e PRODUCT_NAME="1Tap" \
+  -e LOGO_URL="/logo.png" \
+  -e API_KEY="replace-me" \
+  -e BETTER_AUTH_SECRET="$(openssl rand -hex 32)" \
+  -e NEXT_PUBLIC_BETTER_AUTH_URL="http://localhost:3000" \
+  -e AUTHORIZED_DOMAIN="example.com" \
+  -e GOOGLE_CLIENT_ID="your-google-client-id" \
+  -e GOOGLE_CLIENT_SECRET="your-google-client-secret" \
+  ghcr.io/fbcgulfport/1tap:latest
+```
+
 ## Scripts
 
 - `bun run dev` - Start development server

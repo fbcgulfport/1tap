@@ -34,5 +34,6 @@ export const env = createEnv({
 		GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
 		POSTHOG_API_KEY: process.env.POSTHOG_API_KEY,
 		NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY
-	}
+	},
+	skipValidation: process.env.SKIP_ENV_VALIDATION === "1"
 })
