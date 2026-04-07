@@ -1,0 +1,14 @@
+.git
+.github
+node_modules
+.next
+.env
+.env.*
+local.db
+*.db
+uploads
+coverage
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
